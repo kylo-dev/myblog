@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav" v-if="!isAuthenticated">
+        <ul class="navbar-nav" v-if="!$store.state.account.id">
           <li class="nav-item">
             <a class="nav-link" href="/auth/loginForm">Log in</a>
           </li>
@@ -13,7 +13,7 @@
             <a class="nav-link" href="/auth/joinForm">Join us</a>
           </li>
         </ul>
-        <ul class="navbar-nav" v-if="isAuthenticated">
+        <ul class="navbar-nav" v-else>
           <li class="nav-item">
             <a class="nav-link" href="/board/saveForm">Write</a>
           </li>
@@ -21,7 +21,7 @@
             <a class="nav-link" href="/user/updateForm">User Info</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/logout">Log out</a>
+            <a class="nav-link" @click="logout()">Log out</a>
           </li>
         </ul>
       </div>
@@ -30,14 +30,20 @@
   </template>
   
   <script>
+import router from '@/router';
+import store from '@/scripts/store';
+
   export default {
     name: 'Header',
-    data() {
-      return {
-        isAuthenticated: false, // Set this value dynamically based on authentication status
-      };
-    },
-    // Add methods or lifecycle hooks as needed
+
+    setup() {
+      const logout = () =>{
+        store.commit('setAccount', 0);
+        sessionStorage.removeItem("id");
+        router.push({path: "/"});
+      }
+      return {logout}
+    }
   };
   </script>
   

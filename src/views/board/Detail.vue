@@ -22,7 +22,7 @@
     </div>
     <hr />
 
-    <!-- 댓글 작성 -->
+    <!-- 댓글 작성
     <div class="card">
       <form @submit.prevent="submitReply">
         <input type="hidden" id="userId" v-model="currentUser.id">
@@ -37,7 +37,7 @@
     </div>
     <br />
 
-    <!-- 댓글 리스트 -->
+    <!-- 댓글 리스트 
     <div class="card mb-2">
       <div class="card-header">댓글 리스트</div>
       <ul id="reply-box" class="list-group">
@@ -49,10 +49,32 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
   </div>
 </template>
 
-<script></script>
+<script>
+import axios from 'axios';
+import { reactive } from 'vue';
+export default {
+  name : "Detail",
+
+  setup() {
+    // 반응적인 상태 생성
+    const state = reactive({
+      boardId: null,
+    });
+
+    // 컴포넌트가 마운트되었을 때 실행되는 로직
+    onMounted(() => {
+      state.boardId = $route.params.id;
+    });
+    return {
+      state,
+    };
+  },
+  
+}
+</script>
 
 <style></style>
