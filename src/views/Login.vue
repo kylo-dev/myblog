@@ -37,7 +37,7 @@ export default {
         });
 
         const submit = () =>{
-            axios.post("/api/user/login/test", state.form)
+            axios.post("/api/user/login", state.form)
             .then((res)=>{
                 if (res.data.status === 500 && res.data.data === '404 NOT_FOUND') {
                     window.alert("로그인 정보가 존재하지 않습니다.");

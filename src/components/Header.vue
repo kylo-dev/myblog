@@ -27,27 +27,38 @@
       </div>
     </nav>
     <br/>
-  </template>
+</template>
   
-  <script>
+<script>
 import router from '@/router';
 import store from '@/scripts/store';
+import axios from 'axios';
 
   export default {
     name: 'Header',
 
     setup() {
       const logout = () =>{
-        store.commit('setAccount', 0);
-        sessionStorage.removeItem("id");
-        router.push({path: "/"});
+        axios.post("/api/user/logout")
+          .then(({data})=>{
+            if(data.status === 200 && data.data === 1){
+              store.commit('setAccount', 0);
+              window.alert("로그아웃 되었습니다.")
+              sessionStorage.removeItem("id");
+              router.push({path: "/"});
+            }
+          }).catch(()=>{
+            window.alert("로그아웃 오류 발생");
+          });
       }
       return {logout}
     }
   };
-  </script>
-  
-  <style>
-  /* Add your styles here */
-  </style>
+</script>
+
+<style>
+.nav-link{
+  cursor: pointer;
+}
+</style>
   

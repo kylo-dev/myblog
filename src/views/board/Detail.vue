@@ -37,7 +37,7 @@
     </div>
     <br />
 
-    <!-- 댓글 리스트 
+    댓글 리스트 
     <div class="card mb-2">
       <div class="card-header">댓글 리스트</div>
       <ul id="reply-box" class="list-group">
@@ -54,7 +54,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { reactive } from 'vue';
 export default {
   name : "Detail",
@@ -65,10 +64,10 @@ export default {
       boardId: null,
     });
 
-    // 컴포넌트가 마운트되었을 때 실행되는 로직
-    onMounted(() => {
-      state.boardId = $route.params.id;
-    });
+    // // 컴포넌트가 마운트되었을 때 실행되는 로직
+    // onMounted(() => {
+    //   state.boardId = $route.params.id;
+    // });
     return {
       state,
     };

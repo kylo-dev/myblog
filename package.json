@@ -13,6 +13,8 @@
     "http-proxy-middleware": "^2.0.6",
     "jquery": "^3.7.1",
     "vue": "^3.2.13",
+    "vue-cookie": "^1.1.4",
+    "vue-cookies": "^1.8.3",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.2"
   },
