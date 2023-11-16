@@ -2,26 +2,31 @@
   <div class="container mt-2">
     <button class="btn btn-secondary" @click="goBack">돌아가기</button>
     <!-- 글 작성자만 수정 및 삭제 가능 -->
-    <div v-if="board.user.id === currentUser.id">
-      <router-link :to="'/board/' + board.id + '/updateForm'" class="btn btn-warning">수정</router-link>
+    <span v-if="state.posts.user_id == hostId">
+        <a class="btn btn-warning" href="'/board/' + boardId + '/updateForm'">수정</a>
       <button class="btn btn-danger" @click="deleteBoard">삭제</button>
-    </div>
+    </span>
 
     <br/> <br/>
     <div>
-      글 번호: <span id="Id">{{ board.id }}</span>
-      작성자: <span>{{ board.user.username }}</span>
+      글 번호: <span id="Id">{{boardId}}</span>
+      작성자: <span>{{state.posts.user_id}}</span>
     </div>
     <br />
     <div>
-      <h3>{{ board.title }}</h3>
+      <h3>제목 : {{state.posts.title}}</h3>
     </div>
     <hr />
-    <div>
-      <div v-html="board.content"></div>
+    <div class="form-group">
+          <label for="content">내용</label>
+          <textarea class="form-control" rows="5" id="content" v-html="state.posts.content" disabled></textarea>
     </div>
+    <!-- <div>
+      <div v-html="state.posts.content"></div>
+    </div> -->
     <hr />
-
+  </div>
+</template>
     <!-- 댓글 작성
     <div class="card">
       <form @submit.prevent="submitReply">
@@ -50,29 +55,36 @@
         </li>
       </ul>
     </div> -->
-  </div>
-</template>
 
 <script>
-import { reactive } from 'vue';
+import axios from 'axios';
+import { onMounted, reactive } from 'vue';
+import { useRoute } from 'vue-router';
 export default {
   name : "Detail",
 
-  setup() {
-    // 반응적인 상태 생성
-    const state = reactive({
-      boardId: null,
-    });
 
-    // // 컴포넌트가 마운트되었을 때 실행되는 로직
-    // onMounted(() => {
-    //   state.boardId = $route.params.id;
-    // });
-    return {
-      state,
-    };
-  },
-  
+  setup() {
+    const route = useRoute();
+    const state = reactive({
+      posts: [],
+    });
+    const boardId = route.params.id;
+    const hostId = sessionStorage.getItem("id");
+    onMounted(() => {
+      // URL에서 path parameter 값을 가져와서 데이터에 할당
+      axios.get('/api/board/' + boardId)
+        .then(({data}) => {
+          console.log(hostId);
+          console.log(data);
+          state.posts = data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    });
+    return { hostId,boardId, state };
+  }
 }
 </script>
 
