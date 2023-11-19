@@ -122,26 +122,41 @@ export default {
     });
     
     const updateBoard = () =>{
-      form.content = editor.value.getMarkdown();
+      if(window.confirm("정말 수정하시겠습니까?")){
+        form.content = editor.value.getMarkdown();
 
-      console.log(form);
+        console.log(form);
 
-      axios.patch(`/api/board/update/${boardId}`, form)
-      .then((res)=>{
-        if(res.data.status === 500) {
-              window.alert("서버 오류가 발생하였습니다. 다시 작성해주세요");
-              window.location.reload();
-              return;
+        axios.patch(`/api/board/update/${boardId}`, form)
+        .then((res)=>{
+          if(res.data.status === 500) {
+                window.alert("서버 오류가 발생하였습니다. 다시 작성해주세요");
+                window.location.reload();
+                return;
+          }
+          window.alert("게시글이 수정되었습니다.")
+          router.push({path: `/board/${boardId}`});
+          }).catch(()=>{
+            window.alert("다시 글을 수정해주세요.")
+          });
         }
-        window.alert("게시글이 수정되었습니다.")
-        router.push({path: `/board/${boardId}`});
-        }).catch(()=>{
-          window.alert("다시 글을 수정해주세요.")
-        });
     };
 
     const deleteBoard = () =>{
-      
+      if(window.confirm("정말 삭제하시겠습니까?")){
+        axios.delete(`/api/board/delete/${boardId}`)
+        .then((res)=>{
+          if(res.data.status === 400) {
+              window.alert("서버 오류가 발생하였습니다. 다시 수행해 주세요");
+              window.location.reload();
+              return;
+          }
+          window.alert("게시글이 삭제되었습니다.")
+          router.push({path: "/"});
+        }).catch(()=>{
+            window.alert("다시 수행해 주세요");
+        });
+      }
     }
 
     return { editor, hostId, boardId, form, updateBoard, deleteBoard }
