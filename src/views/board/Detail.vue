@@ -2,28 +2,26 @@
   <div class="container mt-2">
     <button class="btn btn-secondary" @click="goBack">돌아가기</button>
     <!-- 글 작성자만 수정 및 삭제 가능 -->
-    <span v-if="state.posts.user_id == hostId">
-        <a class="btn btn-warning" href="'/board/' + boardId + '/updateForm'">수정</a>
-      <button class="btn btn-danger" @click="deleteBoard">삭제</button>
+    <span v-if="form.user_id == hostId">
+      <button class="btn btn-warning" @click="updateBoard()">수정</button>
+      <button class="btn btn-danger" @click="deleteBoard()">삭제</button>
     </span>
 
     <br/> <br/>
     <div>
       글 번호: <span id="Id">{{boardId}}</span>
-      작성자: <span>{{state.posts.user_id}}</span>
+      작성자: <span>{{form.user_id}}</span>
     </div>
     <br />
     <div>
-      <h3>제목 : {{state.posts.title}}</h3>
+      <!-- <h3>제목 : {{state.posts.title}}</h3> -->
+      <input class="form-control" v-text="form.title" v-model="form.title"
+           placeholder="Enter Title" type="text">
     </div>
     <hr />
     <div class="form-group">
-          <label for="content">내용</label>
-          <textarea class="form-control" rows="5" id="content" v-html="state.posts.content" disabled></textarea>
+          <div id="editor"></div>
     </div>
-    <!-- <div>
-      <div v-html="state.posts.content"></div>
-    </div> -->
     <hr />
   </div>
 </template>
@@ -57,8 +55,11 @@
     </div> -->
 
 <script>
+import router from '@/router';
+import Editor from '@toast-ui/editor'
+import '@toast-ui/editor/dist/toastui-editor.css'
 import axios from 'axios';
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref} from 'vue';
 import { useRoute } from 'vue-router';
 export default {
   name : "Detail",
@@ -66,24 +67,84 @@ export default {
 
   setup() {
     const route = useRoute();
-    const state = reactive({
-      posts: [],
-    });
+    const editor = ref();
     const boardId = route.params.id;
     const hostId = sessionStorage.getItem("id");
-    onMounted(() => {
-      // URL에서 path parameter 값을 가져와서 데이터에 할당
-      axios.get('/api/board/' + boardId)
-        .then(({data}) => {
-          console.log(hostId);
-          console.log(data);
-          state.posts = data;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+
+    const form = reactive({
+      title: '',
+      content: '',
+      user_id: ''
     });
-    return { hostId,boardId, state };
+
+    onMounted(async () => {
+      try {
+        // URL에서 path parameter 값을 가져와서 데이터에 할당
+        const { data } = await axios.get('/api/board/' + boardId);
+        form.title = data.title;
+        form.user_id = data.user_id;
+
+        console.log(boardId);
+        console.log(data);
+
+        editor.value = new Editor({
+          el: document.querySelector('#editor'),
+          height: '500px',
+          initialEditType: 'wysiwyg',
+          initialValue: data.content,
+          hooks: {
+            async addImageBlobHook(blob, callback) {
+              // 이미지 업로드 로직 커스텀
+              try {
+                const formData = new FormData();
+                formData.append('image', blob);
+
+                const response = await fetch('/api/tui-editor/image-upload', {
+                  method: 'POST',
+                  body: formData,
+                });
+
+                const filename = await response.text();
+                console.log('서버에 저장된 파일명 : ', filename);
+
+                const imageUrl = `/api/tui-editor/image-print?filename=${filename}`;
+                callback(imageUrl, 'image alt attribute');
+
+              } catch (error) {
+                console.error('업로드 실패 : ', error);
+              }
+            },
+          },
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    });
+    
+    const updateBoard = () =>{
+      form.content = editor.value.getMarkdown();
+
+      console.log(form);
+
+      axios.patch(`/api/board/update/${boardId}`, form)
+      .then((res)=>{
+        if(res.data.status === 500) {
+              window.alert("서버 오류가 발생하였습니다. 다시 작성해주세요");
+              window.location.reload();
+              return;
+        }
+        window.alert("게시글이 수정되었습니다.")
+        router.push({path: `/board/${boardId}`});
+        }).catch(()=>{
+          window.alert("다시 글을 수정해주세요.")
+        });
+    };
+
+    const deleteBoard = () =>{
+      
+    }
+
+    return { editor, hostId, boardId, form, updateBoard, deleteBoard }
   }
 }
 </script>

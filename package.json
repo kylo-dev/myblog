@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@toast-ui/editor": "^3.2.2",
     "axios": "^1.6.1",
     "core-js": "^3.8.3",
     "http-proxy-middleware": "^2.0.6",
@@ -16,6 +17,7 @@
     "vue-cookie": "^1.1.4",
     "vue-cookies": "^1.8.3",
     "vue-router": "^4.0.3",
+    "vue3-summernote-editor": "^1.0.2",
     "vuex": "^4.0.2"
   },
   "devDependencies": {
