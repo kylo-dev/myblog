@@ -16,15 +16,16 @@
         </div>
       </div>
     </div>
-<!--
+
     <ul class="pagination justify-content-center">
-      <li class="page-item" :class="{ 'disabled': boards.first, 'active': !boards.first }">
-        <a class="page-link" :href="getPaginationLink(boards.number - 1)">Previous</a>
+      <li class="page-item" :class="{ 'disabled': state.page.first, 'active': !state.page.first }">
+        <button class="page-link" @click="prev()">Previous</button>
       </li>
-      <li class="page-item" :class="{ 'disabled': boards.last, 'active': !boards.last }">
-        <a class="page-link" :href="getPaginationLink(boards.number + 1)">Next</a>
+      <li class="page-item" :class="{ 'disabled': state.page.last, 'active': !state.page.last }">
+        <button class="page-link" @click="next()">Next</button>
       </li>
-    </ul> -->
+    </ul>
+
   </div>
 </template>
   
@@ -37,17 +38,61 @@ export default {
   setup() {
     const state = reactive({
       posts: [],
+      page: {}
     });
     
     axios.get("/api/home")
       .then((res) => {
       state.posts = res.data.content;
+      state.page = {
+        'first': res.data.first,
+        'last': res.data.last,
+        'number': res.data.number,
+      };
+      console.log(res.data);
+      console.log(state.page);
     })
     .catch(err => {
       console.error(err);
     });
 
-    return {state};
+    const prev = ()=>{
+      const newPage = state.page.number - 1;
+      axios.get(`/api/home?page=${newPage}`)
+        .then((res) => {
+        state.posts = res.data.content;
+        state.page = {
+          'first': res.data.first,
+          'last': res.data.last,
+          'number': res.data.number,
+        };
+        console.log(res.data);
+        console.log(state.page);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+
+    const next = ()=>{
+      const newPage = state.page.number + 1;
+      axios.get(`/api/home?page=${newPage}`)
+        .then((res) => {
+        state.posts = res.data.content;
+        state.page = {
+          'first': res.data.first,
+          'last': res.data.last,
+          'number': res.data.number,
+        };
+        console.log(res.data);
+        console.log(state.page);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+
+    return {state, prev, next};
   }
 }
 </script>
