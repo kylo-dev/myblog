@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from "@/views/Home.vue";
-import Login from "@/views/Login.vue";
-import Join from "@/views/Join.vue";
+import Login from "@/views/user/Login.vue";
+import Join from "@/views/user/Join.vue";
 import Write from "@/views/board/Write.vue";
 import Detail from "@/views/board/Detail.vue";
 import BoardUpdate from "@/views/board/Update.vue";

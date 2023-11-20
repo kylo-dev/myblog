@@ -49,8 +49,8 @@ export default {
         'last': res.data.last,
         'number': res.data.number,
       };
-      console.log(res.data);
-      console.log(state.page);
+      // console.log(res.data);
+      // console.log(state.page);
     })
     .catch(err => {
       console.error(err);

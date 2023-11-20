@@ -17,7 +17,7 @@
                 <input type="email" id="email" 
                 v-model="state.form.email" class="form-control" placeholder="Enter Email">
             </div>
-        <button id="btn-save" class="btn btn-primary mx-4 mb-2" @click="submit()">회원가입</button>
+        <button id="btn-save" class="btn btn-primary mb-2" @click="submit()">회원가입</button>
     </div>
 </template>
 
