@@ -18,7 +18,8 @@
             <a class="nav-link" href="/board/saveForm">Write</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/user/updateForm">User Info</a>
+            <!-- <a class="nav-link" href="'/auth/detail/' + userId">User Info</a> -->
+            <router-link class="nav-link" :to="'/auth/detail/' + userId">User Info</router-link>
           </li>
           <li class="nav-item">
             <a class="nav-link" @click="logout()">Log out</a>
@@ -38,6 +39,8 @@ import axios from 'axios';
     name: 'Header',
 
     setup() {
+      const userId = sessionStorage.getItem("id");
+
       const logout = () =>{
         axios.post("/api/user/logout")
           .then(({data})=>{
@@ -51,7 +54,7 @@ import axios from 'axios';
             window.alert("로그아웃 오류 발생");
           });
       }
-      return {logout}
+      return {userId,logout}
     }
   };
 </script>

@@ -209,10 +209,25 @@ export default {
           }).catch(()=>{
             window.alert("다시 댓글을 작성해 주세요.")
           });
+      };
+
+      const deleteReply = (replyId) => {
+        axios.delete(`/api/board/${boardId}/reply/${replyId}`)
+        .then((res)=>{
+        if(res.data.status === 500) {
+                window.alert("서버 오류가 발생하였습니다. 다시 수행해주세요");
+                window.location.reload();
+                return;
+          }
+          window.alert("댓글이 삭제되었습니다.")
+          router.go(0);
+          }).catch(()=>{
+            window.alert("다시 삭제해 주세요.")
+          });
       }
     
 
-    return { editor, viewer, hostId, boardId, form, reply, updateBoard, deleteBoard, goBack, submitReply }
+    return { editor, viewer, hostId, boardId, form, reply, updateBoard, deleteBoard, goBack, submitReply, deleteReply }
   }
 }
 </script>
