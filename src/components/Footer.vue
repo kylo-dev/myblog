@@ -1,9 +1,10 @@
 <template>
-    <div class="jumbotron text-center">
-        <p>💻 Created by Gyeom</p>
-        <p>☎️ 010-4505-3677</p>
-        <p>🏴 서울시 미아동</p>
+
+    <footer class="bg-light text-center text-lg-start mt-auto">
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        <strong>© Created by Hyun Gyeom</strong>
     </div>
+    </footer>
 </template>
 
 <script>
@@ -13,7 +14,4 @@ export default {
 </script>
 
 <style scoped>
-.jumbotron {
-    margin-bottom: 0;
-}
 </style>

@@ -9,7 +9,7 @@
             <div class="form-group">
                 <div id="editor"></div>
             </div>
-        <button class="btn btn-primary mx-4 mb-2" id="btn-board-save" @click="submit()">글쓰기 완료</button>
+        <button class="btn btn-primary mb-2" id="btn-board-save" @click="submit()">글쓰기 완료</button>
     </div>
 </template>
   
@@ -60,10 +60,6 @@ export default {
             hooks: {
             async addImageBlobHook(blob, callback) { // 이미지 업로드 로직 커스텀
                 try {
-                    /*
-                     * 1. 에디터에 업로드한 이미지를 FormData 객체에 저장
-                     *    (이때, 컨트롤러 uploadEditorImage 메서드의 파라미터인 'image'와 formData에 append 하는 key('image')값은 동일해야 함)
-                     */
                     const formData = new FormData();
                     formData.append('image', blob);
 

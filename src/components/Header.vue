@@ -18,7 +18,6 @@
             <a class="nav-link" href="/board/saveForm">Write</a>
           </li>
           <li class="nav-item">
-            <!-- <a class="nav-link" href="'/auth/detail/' + userId">User Info</a> -->
             <router-link class="nav-link" :to="'/auth/detail/' + userId">User Info</router-link>
           </li>
           <li class="nav-item">

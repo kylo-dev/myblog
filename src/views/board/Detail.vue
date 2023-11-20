@@ -9,18 +9,18 @@
       </span>
     </div>
 
-    <br/> <br/>
+    
     <p class="lead fw-bold">
-      [No: {{boardId}} &nbsp; 작성자: {{form.username}}]     
+      <strong>[No: {{boardId}} &nbsp; 작성자: {{form.username}}]     </strong>
     </p>
-    <br />
-    <div>
+    
+    <hr />
+    <div class="mb-3">
       <h3>Title</h3>
       <input class="form-control" v-text="form.title" v-model="form.title"
            placeholder="Enter Title" type="text"
            :disabled="form.user_id !== hostId">
     </div>
-    <hr />
     
     <h3>Content</h3>
     <div class="form-group">
@@ -33,18 +33,20 @@
     <hr />
   </div>
 
+  <!-- 댓글 작성 -->
     <div class="card align-center" style="width: 65%; margin: 0 auto;">
         <div class="card-body">
           <textarea class="form-control" rows="1" v-model="reply.content" placeholder="댓글을 입력하세요"></textarea>
         </div>
 
         <div class="card-footer">
-          <button type="button" @click="submitReply" class="btn btn-primary">등록</button>
+          <button type="button" @click="submitReply" class="btn btn-primary float-right">등록</button>
         </div>
     </div>
     <br />
 
-    <div class="card mb-2" style="width: 65%; margin: 0 auto;">
+    <!-- 댓글 리스트 -->
+    <div class="card mb-4" style="width: 65%; margin: 0 auto;">
       <div class="card-header">댓글 리스트</div>
       <ul id="reply-box" class="list-group">
         <li v-for="reply in form.replies" :key="reply.id" class="list-group-item d-flex justify-content-between">
@@ -69,7 +71,6 @@ import { onMounted, reactive, ref} from 'vue';
 import { useRoute } from 'vue-router';
 export default {
   name : "Detail",
-
 
   setup() {
     const route = useRoute();

@@ -4,7 +4,6 @@ import Login from "@/views/user/Login.vue";
 import Join from "@/views/user/Join.vue";
 import Write from "@/views/board/Write.vue";
 import Detail from "@/views/board/Detail.vue";
-import BoardUpdate from "@/views/board/Update.vue";
 import UserDetail from "@/views/user/Detail.vue";
 
 const routes = [
@@ -14,7 +13,6 @@ const routes = [
   {path: '/auth/detail/:id', component: UserDetail},
   {path: '/board/saveForm', component: Write},
   {path: '/board/:id', component: Detail},
-  {path: '/board/:id/updateForm', component: BoardUpdate},
 ]
 
 const router = createRouter({

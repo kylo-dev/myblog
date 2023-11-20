@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container mb-3">
         <div class="form-group">
             <label for="username">Username</label>
             <input class="form-control" id="username"
@@ -13,9 +13,7 @@
         </div>
 
         <button class="btn btn-primary" id="btn-login" @click="submit()">로그인</button>
-        <!-- <a href="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=1f0c8af976d2a64af21867e75e6198ea&redirect_uri=http://localhost:8082/auth/kakao/callback">
-            <img th:src="@{/image/kakao_login.png}" height="38px">
-        </a> -->
+
     </div>
 </template>
 

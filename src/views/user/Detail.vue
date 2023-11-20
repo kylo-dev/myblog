@@ -2,7 +2,6 @@
 
   <div class="container">
     
-
       <div class="form-group">
         <label for="username">Username</label>
         <input v-model="state.posts.username" class="form-control" id="username" type="text" readonly>
