@@ -30,6 +30,9 @@ export default {
     name: 'Join',
 
     setup() {
+        const hostName = window.location.hostname;
+        const hostNameServerUrl = 'http://' + hostName + ':8080';
+
         const state = reactive({
             form:{
                 username: "",
@@ -39,18 +42,23 @@ export default {
         });
 
         const submit = ()=>{
-            axios.post("/api/user/join", state.form)
+            axios.post(hostNameServerUrl + '/api/user/join', state.form)
                 .then(({data})=>{
                     if (data.status === 200 && data.data === 1) {
                         window.alert("회원가입이 완료되었습니다.");
                         router.push({path: "/auth/loginForm"});
+                    }
+                    else if (data.status === 500){
+                        console.log(data);
+                        window.alert("중복된 회원입니다.");
+                        window.location.reload();
                     }
                 }).catch(()=>{
                     window.alert("다시 회원가입을 해주세요.");
                 });
         }
         
-        return {state, submit}
+        return {state, submit, hostName, hostNameServerUrl}
     }
 }
 

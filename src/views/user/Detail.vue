@@ -34,12 +34,14 @@ export default {
   setup() {
     const route = useRoute();
     const userId = route.params.id;
+    const hostName = window.location.hostname;
+    const hostNameServerUrl = 'http://' + hostName + ':8080';
 
     const state = reactive({
       posts: []
     });
 
-    axios.get(`/api/user/${userId}`)
+    axios.get(hostNameServerUrl + `/api/user/${userId}`)
     .then((res) => {
       state.posts = res.data;
 
@@ -48,7 +50,7 @@ export default {
         console.error(err);
       });
 
-      return {userId, state}
+      return {userId, state, hostName, hostNameServerUrl}
   }
 
 }

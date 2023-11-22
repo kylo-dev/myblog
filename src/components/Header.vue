@@ -5,7 +5,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav" v-if="!$store.state.account.id">
+        <ul class="navbar-nav" v-if="!userId">
           <li class="nav-item">
             <a class="nav-link" href="/auth/loginForm">Log in</a>
           </li>
@@ -30,7 +30,6 @@
 </template>
   
 <script>
-import router from '@/router';
 import store from '@/scripts/store';
 import axios from 'axios';
 
@@ -38,22 +37,23 @@ import axios from 'axios';
     name: 'Header',
 
     setup() {
+      const hostName = window.location.hostname;
+      const hostNameServerUrl = 'http://' + hostName + ':8080';
       const userId = sessionStorage.getItem("id");
 
       const logout = () =>{
-        axios.post("/api/user/logout")
+        axios.post(hostNameServerUrl + '/api/user/logout')
           .then(({data})=>{
             if(data.status === 200 && data.data === 1){
               store.commit('setAccount', 0);
-              window.alert("로그아웃 되었습니다.")
               sessionStorage.removeItem("id");
-              router.push({path: "/"});
+              window.location.href = "/";
             }
           }).catch(()=>{
             window.alert("로그아웃 오류 발생");
           });
       }
-      return {userId,logout}
+      return {userId, logout, hostName, hostNameServerUrl}
     }
   };
 </script>

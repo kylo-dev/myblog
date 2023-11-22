@@ -73,6 +73,8 @@ export default {
   name : "Detail",
 
   setup() {
+    const hostName = window.location.hostname;
+    const hostNameServerUrl = 'http://' + hostName + ':8080';
     const route = useRoute();
     const editor = ref();
     const viewer = ref();
@@ -97,16 +99,12 @@ export default {
     onMounted(async () => {
       try {
         // URL에서 path parameter 값을 가져와서 데이터에 할당
-        const { data } = await axios.get(`/api/board/${boardId}/reply`);
+        const { data } = await axios.get(hostNameServerUrl + `/api/board/${boardId}/reply`);
         form.title = data.title;
         form.user_id = data.user_id;
         form.username = data.username;
         form.content = data.content;
         form.replies = data.replies;
-
-        console.log(hostId);
-        console.log(data);
-        console.log(form);
 
         if(data.user_id == hostId){
           editor.value = new Editor({
@@ -121,7 +119,7 @@ export default {
                   const formData = new FormData();
                   formData.append('image', blob);
 
-                  const response = await fetch('/api/tui-editor/image-upload', {
+                  const response = await fetch(hostNameServerUrl + '/api/tui-editor/image-upload', {
                     method: 'POST',
                     body: formData,
                   });
@@ -129,7 +127,7 @@ export default {
                   const filename = await response.text();
                   console.log('서버에 저장된 파일명 : ', filename);
 
-                  const imageUrl = `/api/tui-editor/image-print?filename=${filename}`;
+                  const imageUrl = hostNameServerUrl + `/api/tui-editor/image-print?filename=${filename}`;
                   callback(imageUrl, 'image alt attribute');
 
                 } catch (error) {
@@ -161,7 +159,7 @@ export default {
 
         console.log(form);
 
-        axios.patch(`/api/board/update/${boardId}`, form)
+        axios.patch(hostNameServerUrl + `/api/board/update/${boardId}`, form)
         .then((res)=>{
           if(res.data.status === 500) {
                 window.alert("서버 오류가 발생하였습니다. 다시 작성해주세요");
@@ -178,7 +176,7 @@ export default {
 
     const deleteBoard = () =>{
       if(window.confirm("정말 삭제하시겠습니까?")){
-        axios.delete(`/api/board/delete/${boardId}`)
+        axios.delete(hostNameServerUrl + `/api/board/delete/${boardId}`)
         .then((res)=>{
           if(res.data.status === 400) {
               window.alert("서버 오류가 발생하였습니다. 다시 수행해 주세요");
@@ -198,7 +196,7 @@ export default {
         window.alert("로그인 이후에 댓글을 작성할 수 있습니다.");
         return;
       }
-      axios.post(`/api/board/${boardId}/reply`, reply)
+      axios.post(hostNameServerUrl + `/api/board/${boardId}/reply`, reply)
       .then((res)=>{
         if(res.data.status === 500) {
                 window.alert("서버 오류가 발생하였습니다. 다시 작성해주세요");
@@ -213,7 +211,7 @@ export default {
       };
 
       const deleteReply = (replyId) => {
-        axios.delete(`/api/board/${boardId}/reply/${replyId}`)
+        axios.delete(hostNameServerUrl + `/api/board/${boardId}/reply/${replyId}`)
         .then((res)=>{
         if(res.data.status === 500) {
                 window.alert("서버 오류가 발생하였습니다. 다시 수행해주세요");
@@ -228,7 +226,7 @@ export default {
       }
     
 
-    return { editor, viewer, hostId, boardId, form, reply, updateBoard, deleteBoard, goBack, submitReply, deleteReply }
+    return { editor, viewer, hostId, boardId, form, reply, updateBoard, deleteBoard, goBack, submitReply, deleteReply, hostName, hostNameServerUrl }
   }
 }
 </script>

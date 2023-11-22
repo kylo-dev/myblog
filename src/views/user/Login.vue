@@ -20,13 +20,14 @@
 <script>
 import {reactive} from "vue";
 import axios from "axios";
-import router from "@/router/index";
 import store from "@/scripts/store";
 
 export default {
     name: 'Login',
 
     setup() {
+        const hostName = window.location.hostname;
+        const hostNameServerUrl = 'http://' + hostName + ':8080';
         const state = reactive({
             form:{
                 username: "",
@@ -35,7 +36,7 @@ export default {
         });
 
         const submit = () =>{
-            axios.post("/api/user/login", state.form)
+            axios.post(hostNameServerUrl + '/api/user/login', state.form)
             .then((res)=>{
                 if (res.data.status === 500 && res.data.data === '404 NOT_FOUND') {
                     window.alert("로그인 정보가 존재하지 않습니다.");
@@ -43,15 +44,14 @@ export default {
                     return;
                 }
                 store.commit('setAccount', res.data);
-                console.log(res.data);
                 sessionStorage.setItem("id", res.data);
                 window.alert("로그인 되었습니다.");
-                router.push({path: "/"});
+                window.location.href = "/";
             }).catch(() => {
                 window.alert("로그인 정보가 존재하지 않습니다.");
             });
         }
-        return {state, submit}
+        return {state, submit, hostName, hostNameServerUrl}
     }
 }
 </script>

@@ -20,8 +20,11 @@ export default {
   },
 
   setup() {
+    const hostName = window.location.hostname;
+    const hostNameServerUrl = 'http://' + hostName + ':8080';
+
     const check = () =>{
-      axios.get("/api/user/check")
+      axios.get(hostNameServerUrl + '/api/user/check')
         .then(({data})=>{
 
           if(data){
@@ -36,6 +39,7 @@ export default {
       check();
     });
 
+    return {hostName, hostNameServerUrl}
   }
 }
 </script>

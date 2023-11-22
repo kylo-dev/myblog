@@ -40,8 +40,10 @@ export default {
       posts: [],
       page: {}
     });
+    const hostName = window.location.hostname;
+    const hostNameServerUrl = 'http://' + hostName + ':8080';
     
-    axios.get("/api/home")
+    axios.get(hostNameServerUrl + '/api/home')
       .then((res) => {
       state.posts = res.data.content;
       state.page = {
@@ -56,7 +58,7 @@ export default {
 
     const prev = ()=>{
       const newPage = state.page.number - 1;
-      axios.get(`/api/home?page=${newPage}`)
+      axios.get(hostNameServerUrl + `/api/home?page=${newPage}`)
         .then((res) => {
         state.posts = res.data.content;
         state.page = {
@@ -72,7 +74,7 @@ export default {
 
     const next = ()=>{
       const newPage = state.page.number + 1;
-      axios.get(`/api/home?page=${newPage}`)
+      axios.get(hostNameServerUrl + `/api/home?page=${newPage}`)
         .then((res) => {
         state.posts = res.data.content;
         state.page = {
@@ -86,7 +88,7 @@ export default {
       });
     }
 
-    return {state, prev, next};
+    return {state, prev, next, hostName, hostNameServerUrl};
   }
 }
 </script>
