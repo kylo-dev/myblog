@@ -1,4 +1,4 @@
-<template>
+dock<template>
     <div class="container">
             <div class="form-group">
                 <label for="username">Username</label>
